@@ -1,0 +1,15 @@
+/* Custom CSS for Yuval Itzhaki Dating App */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+.main .block-container {
+    padding-top: 2rem;
+    max-width: 800px;
+}
+.stButton > button {
+    border-radius: 25px;
+    font-weight: 600;
+}
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+    border: none;
+}
