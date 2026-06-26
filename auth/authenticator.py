@@ -1,16 +1,25 @@
 """Authentication module for Yuval Itzhaki Dating App."""
 
-import bcrypt
+import hashlib
+import secrets
 import streamlit as st
 from database.db import create_user, get_user_by_username, get_user_by_email, get_profile_by_user_id
 
 
 def hash_password(password):
-    return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    """Hash password using SHA-256 with salt."""
+    salt = secrets.token_hex(16)
+    hashed = hashlib.sha256((salt + password).encode()).hexdigest()
+    return f"{salt}:{hashed}"
 
 
-def verify_password(password, hashed):
-    return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
+def verify_password(password, stored_hash):
+    """Verify password against stored hash."""
+    try:
+        salt, hashed = stored_hash.split(':')
+        return hashlib.sha256((salt + password).encode()).hexdigest() == hashed
+    except (ValueError, AttributeError):
+        return False
 
 
 def register_user(username, email, password):
