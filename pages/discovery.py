@@ -9,7 +9,8 @@ from config.settings import INSIGHT_CATEGORIES
 def render_discovery_page():
     user_id = st.session_state.user_id
 
-    if 'discovery_feed' not in st.session_state:
+    # Always refresh feed on page load to get latest profiles
+    if 'discovery_feed' not in st.session_state or not st.session_state.discovery_feed:
         st.session_state.discovery_feed = get_discovery_feed(user_id)
     if 'discovery_index' not in st.session_state:
         st.session_state.discovery_index = 0
@@ -23,8 +24,8 @@ def render_discovery_page():
         st.markdown("""
         <div class="glass-card" style="text-align:center; padding:60px 28px;">
             <p style="font-size:48px; margin:0;">✨</p>
-            <h3 style="margin:16px 0 8px;">You've seen everyone</h3>
-            <p style="color:rgba(250,249,246,0.6);">Check back later for new profiles</p>
+            <h3 style="margin:16px 0 8px;">No profiles to show</h3>
+            <p style="color:rgba(250,249,246,0.6);">Try refreshing or check your preferences</p>
         </div>
         """, unsafe_allow_html=True)
         if st.button("🔄 Refresh Feed"):
@@ -68,10 +69,10 @@ def render_discovery_page():
         st.markdown(f"""
         <div class="glass-card profile-reveal" style="margin-top:16px;">
             <p style="color:#10b981; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">🔓 Profile Unlocked</p>
-            <p style="color:var(--text-primary); line-height:1.6; margin:12px 0;">{profile.get('bio', 'No bio yet.')}</p>
+            <p style="line-height:1.6; margin:12px 0;">{profile.get('bio', 'No bio yet.')}</p>
             <div style="background:rgba(124,58,237,0.1); border-radius:12px; padding:14px; margin-top:12px;">
                 <p style="font-size:12px; color:#c9a96e; margin:0 0 6px;">Your response:</p>
-                <p style="margin:0; color:var(--text-primary); font-style:italic;">"{response}"</p>
+                <p style="margin:0; font-style:italic;">"{response}"</p>
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -106,9 +107,11 @@ def render_discovery_page():
                 st.session_state.discovery_index += 1
                 st.rerun()
 
-    # Progress
-    st.markdown(f"""
-    <p style="text-align:center; color:rgba(250,249,246,0.3); font-size:12px; margin-top:20px;">
-        {index + 1} / {len(feed)}
-    </p>
-    """, unsafe_allow_html=True)
+    # Progress + refresh button
+    col1, col2, col3 = st.columns([2, 1, 2])
+    with col2:
+        st.caption(f"{index + 1} / {len(feed)}")
+    if st.button("🔄 Refresh", key="refresh_bottom"):
+        st.session_state.discovery_feed = get_discovery_feed(user_id)
+        st.session_state.discovery_index = 0
+        st.rerun()
