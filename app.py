@@ -24,6 +24,7 @@ from pages.discovery import render_discovery_page
 from pages.profile import render_profile_setup, render_profile_edit
 from pages.matches import render_matches_page
 from config.settings import APP_NAME, APP_TAGLINE
+from seed_demo_data import seed_demo_data
 
 
 def render_landing_page():
@@ -88,6 +89,18 @@ def render_landing_page():
                     else:
                         st.error(message)
 
+    # Show demo accounts info
+    with st.expander("🧪 Demo Accounts (for testing)"):
+        st.markdown("""
+        | Username | Password | Name | City |
+        |----------|----------|------|------|
+        | noa_sunshine | demo123 | Noa, 26 | Tel Aviv |
+        | daniel_adventures | demo123 | Daniel, 29 | Jerusalem |
+        | maya_creative | demo123 | Maya, 24 | Haifa |
+        | omer_explorer | demo123 | Omer, 31 | Tel Aviv |
+        | shira_mindful | demo123 | Shira, 27 | Ramat Gan |
+        """)
+
 
 def render_sidebar():
     with st.sidebar:
@@ -110,7 +123,11 @@ def render_sidebar():
 
 
 def main():
+    # Initialize database and seed demo data
     init_database()
+    seed_demo_data()
+
+    # Initialize session state
     init_session_state()
 
     if not st.session_state.authenticated:

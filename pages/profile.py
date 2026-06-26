@@ -15,20 +15,22 @@ def render_profile_setup():
 
     with st.form("profile_setup_form"):
         st.subheader("Basic Information")
+
+        display_name = st.text_input("Display Name *", placeholder="Your name (required)")
+        
         col1, col2 = st.columns(2)
         with col1:
-            display_name = st.text_input("Display Name *")
             age = st.number_input("Age *", min_value=18, max_value=99, value=25)
-        with col2:
             gender = st.selectbox("Gender *", GENDER_OPTIONS)
+        with col2:
             looking_for = st.selectbox("Looking For *", LOOKING_FOR_OPTIONS)
+            city = st.text_input("City", placeholder="Where are you based?")
 
-        city = st.text_input("City")
         bio = st.text_area("Bio", max_chars=MAX_BIO_LENGTH, height=100,
                           placeholder="Tell people about yourself...")
 
         st.subheader("Photos")
-        st.caption(f"Upload up to {MAX_PHOTOS} photos")
+        st.caption(f"Upload up to {MAX_PHOTOS} photos (optional)")
         uploaded_photos = []
         photo_cols = st.columns(MAX_PHOTOS)
         for i in range(MAX_PHOTOS):
@@ -55,16 +57,17 @@ def render_profile_setup():
                 insight_question = st.selectbox("Select a question", presets)
         else:
             insight_question = st.text_input("Write your own question *",
-                                           placeholder="Ask something meaningful...")
+                                           placeholder="Ask something meaningful (at least 5 characters)...")
 
         submitted = st.form_submit_button("✨ Create Profile", use_container_width=True, type="primary")
 
         if submitted:
+            # Validation with clear messages
             if not display_name or not display_name.strip():
-                st.error("Please enter a display name.")
+                st.error("⚠️ Please enter a display name at the top of the form.")
                 return
-            if not insight_question or not insight_question.strip():
-                st.error("Please select or write an Insight Question.")
+            if not insight_question or len(insight_question.strip()) < 5:
+                st.error("⚠️ Please select or write an Insight Question (at least 5 characters).")
                 return
 
             photos_base64 = []
