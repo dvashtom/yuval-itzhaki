@@ -1,6 +1,6 @@
 """
 Yuval Itzhaki - Deep-Value Matching Dating App
-Main entry point for the Streamlit application.
+Premium UI with Glassmorphism design system.
 """
 
 import streamlit as st
@@ -13,7 +13,7 @@ st.set_page_config(
     page_title="Yuval Itzhaki | Deep-Value Dating",
     page_icon="💜",
     layout="centered",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"
 )
 
 from database.db import init_database
@@ -25,24 +25,46 @@ from config.settings import APP_NAME, APP_TAGLINE
 from seed_demo_data import seed_demo_data
 
 
+def load_css():
+    """Inject custom CSS design system."""
+    css_path = os.path.join(os.path.dirname(__file__), "assets", "style.css")
+    if os.path.exists(css_path):
+        with open(css_path) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+
 def render_landing_page():
-    st.markdown(f"# 💜 {APP_NAME}")
-    st.markdown(f"### *{APP_TAGLINE}*")
+    st.markdown(f"""
+    <div style="text-align:center; padding:40px 0 20px;">
+        <h1 style="font-size:2.2rem; margin:0;">💜 {APP_NAME}</h1>
+        <p style="color:rgba(250,249,246,0.6); font-size:16px; margin-top:8px;">{APP_TAGLINE}</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.markdown("**💡 Choose Your Question**")
-        st.caption("Pick a deep question that reveals character")
-    with col2:
-        st.markdown("**✍️ Engage First**")
-        st.caption("Answer their question to unlock profiles")
-    with col3:
-        st.markdown("**💕 Match on Values**")
-        st.caption("Connect based on who you really are")
+    # How it works
+    st.markdown("""
+    <div class="glass-card" style="margin-bottom:24px;">
+        <div style="display:flex; justify-content:space-around; text-align:center;">
+            <div style="flex:1;">
+                <p style="font-size:28px; margin:0;">💡</p>
+                <p style="font-size:12px; font-weight:600; margin:8px 0 2px;">Choose</p>
+                <p style="font-size:11px; color:rgba(250,249,246,0.5); margin:0;">Your deep question</p>
+            </div>
+            <div style="flex:1;">
+                <p style="font-size:28px; margin:0;">✍️</p>
+                <p style="font-size:12px; font-weight:600; margin:8px 0 2px;">Engage</p>
+                <p style="font-size:11px; color:rgba(250,249,246,0.5); margin:0;">Respond to unlock</p>
+            </div>
+            <div style="flex:1;">
+                <p style="font-size:28px; margin:0;">💕</p>
+                <p style="font-size:12px; font-weight:600; margin:8px 0 2px;">Connect</p>
+                <p style="font-size:11px; color:rgba(250,249,246,0.5); margin:0;">Match on values</p>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.divider()
-
-    login_tab, register_tab = st.tabs(["🔑 Login", "✨ Register"])
+    login_tab, register_tab = st.tabs(["Login", "Register"])
 
     with login_tab:
         with st.form("login_form"):
@@ -65,9 +87,9 @@ def render_landing_page():
 
     with register_tab:
         with st.form("register_form"):
-            new_username = st.text_input("Username *", placeholder="Min 3 characters")
+            new_username = st.text_input("Username *")
             new_email = st.text_input("Email *")
-            new_password = st.text_input("Password *", type="password", placeholder="Min 6 characters")
+            new_password = st.text_input("Password *", type="password")
             confirm_password = st.text_input("Confirm Password *", type="password")
             submitted = st.form_submit_button("Create Account", use_container_width=True, type="primary")
             if submitted:
@@ -82,39 +104,32 @@ def render_landing_page():
                         st.session_state.user_id = user_id
                         st.session_state.username = new_username.strip()
                         st.session_state.has_profile = False
-                        st.success(message + " Now create your profile!")
                         st.rerun()
                     else:
                         st.error(message)
 
-    with st.expander("🧪 Demo Accounts (for testing)"):
+    with st.expander("🧪 Demo Accounts"):
         st.markdown("""
-        All demo accounts use password: **demo123**
+        Password for all: **demo123**
         
-        | Username | Name | Age | City |
-        |----------|------|-----|------|
-        | noa_sunshine | Noa | 26 | Tel Aviv |
-        | maya_creative | Maya | 24 | Haifa |
-        | shira_mindful | Shira | 27 | Ramat Gan |
-        | tamar_dreamer | Tamar | 28 | Tel Aviv |
-        | lior_bold | Lior | 25 | Jerusalem |
+        `noa_sunshine` · `maya_creative` · `shira_mindful` · `tamar_dreamer` · `lior_bold`
         """)
 
 
 def render_sidebar():
     with st.sidebar:
         st.markdown(f"## 💜 {APP_NAME}")
-        st.caption(f"Welcome, {st.session_state.username}!")
+        st.caption(f"@{st.session_state.username}")
         st.divider()
 
         if st.session_state.has_profile:
-            page = st.radio("Navigate", ["✨ Discover", "💕 Matches", "👤 My Profile"], label_visibility="collapsed")
+            page = st.radio("", ["✨ Discover", "💕 Matches", "👤 Profile"], label_visibility="collapsed")
         else:
-            page = "👤 My Profile"
+            page = "👤 Profile"
             st.info("Complete your profile to start!")
 
         st.divider()
-        if st.button("🚪 Logout", use_container_width=True):
+        if st.button("Logout", use_container_width=True):
             logout()
             st.rerun()
 
@@ -125,6 +140,7 @@ def main():
     init_database()
     seed_demo_data()
     init_session_state()
+    load_css()
 
     if not st.session_state.authenticated:
         render_landing_page()
@@ -136,7 +152,7 @@ def main():
             render_discovery_page()
         elif current_page == "💕 Matches":
             render_matches_page()
-        elif current_page == "👤 My Profile":
+        elif current_page == "👤 Profile":
             render_profile_edit()
 
 
