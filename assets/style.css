@@ -51,7 +51,7 @@ header {visibility: hidden !important;}
 
 /* ===== TYPOGRAPHY ===== */
 h1, h2, h3, h4, h5, h6, p, span, label, .stMarkdown {
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
 }
 
 h1 {
@@ -188,7 +188,7 @@ h3 {
     background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
     border-radius: 14px !important;
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
     padding: 14px 18px !important;
     font-size: 15px !important;
     transition: border-color 0.3s ease !important;
@@ -210,7 +210,7 @@ h3 {
     background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
     border-radius: 14px !important;
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
 }
 
 /* ===== TABS ===== */
@@ -241,7 +241,7 @@ h3 {
 }
 
 [data-testid="stSidebar"] .stRadio > label {
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
 }
 
 [data-testid="stSidebar"] .stRadio > div > label > div {
@@ -253,7 +253,7 @@ h3 {
 
 [data-testid="stSidebar"] .stRadio > div > label > div:hover {
     background: var(--glass-bg) !important;
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
 }
 
 /* ===== DIVIDER ===== */
@@ -267,7 +267,7 @@ hr {
     background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
     border-radius: 14px !important;
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
 }
 
 .stSuccess {
@@ -278,7 +278,7 @@ hr {
 .streamlit-expanderHeader {
     background: var(--glass-bg) !important;
     border-radius: 14px !important;
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
     border: 1px solid var(--glass-border) !important;
 }
 
@@ -379,7 +379,7 @@ hr {
     background: var(--glass-bg) !important;
     border: 1px solid var(--glass-border) !important;
     border-radius: 14px !important;
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
 }
 
 /* ===== RADIO BUTTONS ===== */
@@ -392,7 +392,7 @@ hr {
     border: 1px solid var(--glass-border) !important;
     border-radius: 12px !important;
     padding: 8px 16px !important;
-    color: var(--text-primary) !important;
+    color: #1a1a2e !important;
 }
 
 /* ===== CAPTION TEXT ===== */
