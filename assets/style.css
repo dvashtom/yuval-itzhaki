@@ -51,7 +51,7 @@ header {visibility: hidden !important;}
 
 /* ===== TYPOGRAPHY ===== */
 h1, h2, h3, h4, h5, h6, p, span, label, .stMarkdown {
-    color: #1a1a2e !important;
+    color: #faf9f6 !important;
 }
 
 h1 {
