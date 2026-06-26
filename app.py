@@ -7,10 +7,8 @@ import streamlit as st
 import os
 import sys
 
-# Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Set page config FIRST
 st.set_page_config(
     page_title="Yuval Itzhaki | Deep-Value Dating",
     page_icon="💜",
@@ -89,16 +87,17 @@ def render_landing_page():
                     else:
                         st.error(message)
 
-    # Show demo accounts info
     with st.expander("🧪 Demo Accounts (for testing)"):
         st.markdown("""
-        | Username | Password | Name | City |
-        |----------|----------|------|------|
-        | noa_sunshine | demo123 | Noa, 26 | Tel Aviv |
-        | daniel_adventures | demo123 | Daniel, 29 | Jerusalem |
-        | maya_creative | demo123 | Maya, 24 | Haifa |
-        | omer_explorer | demo123 | Omer, 31 | Tel Aviv |
-        | shira_mindful | demo123 | Shira, 27 | Ramat Gan |
+        All demo accounts use password: **demo123**
+        
+        | Username | Name | Age | City |
+        |----------|------|-----|------|
+        | noa_sunshine | Noa | 26 | Tel Aviv |
+        | maya_creative | Maya | 24 | Haifa |
+        | shira_mindful | Shira | 27 | Ramat Gan |
+        | tamar_dreamer | Tamar | 28 | Tel Aviv |
+        | lior_bold | Lior | 25 | Jerusalem |
         """)
 
 
@@ -123,11 +122,8 @@ def render_sidebar():
 
 
 def main():
-    # Initialize database and seed demo data
     init_database()
     seed_demo_data()
-
-    # Initialize session state
     init_session_state()
 
     if not st.session_state.authenticated:

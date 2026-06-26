@@ -6,6 +6,18 @@ from database.db import create_interaction
 from config.settings import INSIGHT_CATEGORIES
 
 
+def show_photo(photos):
+    """Display profile photo from base64 data."""
+    if photos and len(photos) > 0:
+        photo = photos[0]
+        if photo.startswith("data:image"):
+            st.markdown(f'<img src="{photo}" style="width:300px; height:300px; border-radius:16px; object-fit:cover; display:block; margin:0 auto;">', unsafe_allow_html=True)
+        else:
+            st.image(photo, width=300)
+    else:
+        st.markdown('<div style="width:300px; height:300px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:16px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="font-size:80px;">👤</span></div>', unsafe_allow_html=True)
+
+
 def render_discovery_page():
     st.markdown("## ✨ Discover")
     st.markdown("*Connect through meaningful insights*")
@@ -34,14 +46,10 @@ def render_discovery_page():
     profile_user_id = profile['user_id']
     is_unlocked = profile_user_id in st.session_state.unlocked_profiles
 
-    # Display profile card
     st.divider()
 
-    # Photo placeholder
-    if profile.get('photos') and len(profile['photos']) > 0:
-        st.image(profile['photos'][0], width=300)
-    else:
-        st.markdown("👤 *No photo*")
+    # Show photo
+    show_photo(profile.get('photos', []))
 
     st.markdown(f"### {profile['display_name']}, {profile['age']}")
     st.markdown(f"📍 {profile.get('city', 'Unknown location')}")

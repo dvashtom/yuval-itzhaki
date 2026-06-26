@@ -62,7 +62,6 @@ def render_profile_setup():
         submitted = st.form_submit_button("✨ Create Profile", use_container_width=True, type="primary")
 
         if submitted:
-            # Validation with clear messages
             if not display_name or not display_name.strip():
                 st.error("⚠️ Please enter a display name at the top of the form.")
                 return
@@ -103,6 +102,21 @@ def render_profile_edit():
     if not profile:
         render_profile_setup()
         return
+
+    # Show profile photos
+    photos = profile.get('photos', [])
+    if photos and len(photos) > 0:
+        st.subheader("Your Photos")
+        photo_cols = st.columns(min(len(photos), 3))
+        for i, photo_data in enumerate(photos):
+            with photo_cols[i]:
+                if photo_data.startswith("data:image/svg"):
+                    st.markdown(f'<img src="{photo_data}" style="width:200px; height:200px; border-radius:12px; object-fit:cover;">', unsafe_allow_html=True)
+                elif photo_data.startswith("data:image"):
+                    st.markdown(f'<img src="{photo_data}" style="width:200px; height:200px; border-radius:12px; object-fit:cover;">', unsafe_allow_html=True)
+                else:
+                    st.image(photo_data, width=200)
+        st.divider()
 
     st.markdown(f"### {profile['display_name']}, {profile['age']}")
     st.markdown(f"📍 {profile.get('city', 'No city set')}")
